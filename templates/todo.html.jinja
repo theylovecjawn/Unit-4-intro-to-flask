@@ -24,21 +24,24 @@
         }
 
         li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             border-radius: 25px;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
 
-            padding: 1px;
+        span {
+            flex: 1;
+            font-size: 20px;
+        }
 
-            text-align: center;
-
-            font-size: 28px;
-
-            color: #DF2A41;
-
-            text-shadow: -1px 0 black, 0 1px green, 1px 0 green, 0 -1px black;
-
-
-
-
+        /* Adjust the delete button style if necessary */
+        form {
+            margin-left: 10px;
+            /* Add some space between the todo and delete button */
         }
 
         form {
@@ -46,22 +49,35 @@
         }
 
         .submit {
-            text-align: center;
             background: #016ABC;
             color: #fff;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            box-shadow: 5px 5px 5px #eee;
-            text-shadow: none;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+
         }
+
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #016ABC;
+            box-shadow: 0 0 5px rgba(0, 100, 200, 0.5);
+        }
+
 
         .submit:hover {
             background: #B9DFFF;
-            color: #fff;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            box-shadow: 5px 5px 5px #eee;
-            text-shadow: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -70,16 +86,19 @@
     <h1><u>ToDo List:</u></h1>
     <ul>
         {% for todo in todos %}
-        <li>{{todo}}</li>
+        <li>
+            <span>{{todo}}</span>
+            <form method="POST" action="/delete_todo/{{loop.index0}}">
+                <input type="submit" value ='Delete'>
+            </form>
+        </li>
         {%endfor%}
     </ul>
-    
+
     <form method="post">
-        <input name="new_todo">
+        <input name="new_todo" type="text" placeholder="Add a new todo...">
         <input type="submit" class="submit">
     </form>
-
-
 </body>
 
 </html>
