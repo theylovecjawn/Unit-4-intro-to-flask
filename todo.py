@@ -23,7 +23,7 @@ def index():
             cursor.execute(f"INSERT INTO `todos`(`description`) VALUES ('{new_todo}')")
             conn.commit()
     cursor = conn.cursor()
-    cursor.execute("SELECT * from `todos`")
+    cursor.execute("SELECT * from `todos` ORDER BY `completion`")
     results = cursor.fetchall()
     cursor.close()
     return render_template("todo.html.jinja", todos=results)
@@ -37,19 +37,21 @@ def todo_delete(todo_index):
     cursor.close()
     return redirect('/')
 
-@app.route('/update_todos', methods=['POST'])
-def update_todos():
+@app.route('/complete_todo/<int:todo_index>', methods=['POST'])
+def todo_complete(todo_index):
     cursor = conn.cursor()
-    results = cursor.fetchall()
-    for todo in results:
-        todo_id = str(todo['id'])
-        if f"todo_{todo_id}" in request.form:
-            
-            todo['completed'] = True
-        else:
-            
-            todo['completed'] = False
-    return render_template('todos.html', todos= results)
+    cursor.execute(f"UPDATE `todos` SET `completion` = 1 WHERE `id` = {todo_index}")
+    conn.commit()
+    cursor.close()
+    return redirect('/')
+
+@app.route('/uncomplete_todo/<int:todo_index>', methods=['POST'])
+def todo_uncomplete(todo_index):
+    cursor = conn.cursor()
+    cursor.execute(f"UPDATE `todos` SET `completion` = 0 WHERE `id` = {todo_index}")
+    conn.commit()
+    cursor.close()
+    return redirect('/')
 
 
 if __name__ == "__main__":

@@ -109,6 +109,40 @@
         .completed {
             text-decoration: line-through;
         }
+
+        .mark-completed-btn {
+            background-color: #27AE60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .mark-completed-btn:hover {
+            background-color: #2ECC71;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .mark-uncompleted-btn {
+            background-color: #FFA500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .mark-uncompleted-btn:hover {
+            background-color: #FFC04C;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -116,14 +150,26 @@
     <h1><u>ToDo List:</u></h1>
     <ul>
         {% for todo in todos %}
-        <li>
+        <li class="{%if todo['completion']%}completed{%endif%}">
+            {% if todo['completion'] %}
+            <form method="POST" action="/uncomplete_todo/{{ todo.id }}">
+                <input type="submit" value='Mark Uncompleted' class='mark-uncompleted-btn'>
+                {%elif todo['completion'] == 0%}
+                <form method="POST" action="/complete_todo/{{todo.id}}">
+                    <input type="submit" value='Mark Completed' class='mark-completed-btn'>
+                </form>
+                {%endif%}
+
+            </form>
 
             {{ todo.description }}
+            {%if todo['completion']%}✔
+            {%endif%}
 
             <form method="POST" action="/delete_todo/{{todo.id}}">
-
                 <input type="submit" value='Delete' class='delete-btn'>
             </form>
+
         </li>
         {%endfor%}
     </ul>
